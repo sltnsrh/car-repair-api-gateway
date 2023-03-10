@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.5
+    container_name: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: my_user
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_DB: keycloakDb
+    ports:
+      - "5432:5432"
+  kc:
+    image: quay.io/keycloak/keycloak:legacy
+    container_name: keycloak
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: db
+      DB_SCHEMA: public
+      DB_DATABASE: keycloakDb
+      DB_USER: my_user
+      DB_PASSWORD: my_password
+      KEYCLOAK_HOSTNAME: localhost
+      KEYCLOAK_USER: kc_admin
+      KEYCLOAK_PASSWORD: kc_password
+    ports:
+      - "8083:8080"
+    depends_on:
+      - db

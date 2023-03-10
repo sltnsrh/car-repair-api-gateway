@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application.name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/msg, /msg2
+          filters:
+            - TokenRelay=
+        - id: back-resources
+          uri: lb://BACK-RESOURCES
+          predicates:
+            - Path=/res, /res2
+          filters:
+            - TokenRelay=
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: keycloak
+            client-id: api-client
+            client-secret: CWpnawIh1TmdiCjJ3UMKp07olyK2LZbv
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
+            scope: openid, message.read
+        provider:
+          keycloak:
+              issuer-uri: http://localhost:8083/auth/realms/car-repair-realm
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    root: INFO
+
+#logging.level.org.springframework.cloud.gateway.route.RouteDefinitionLocator=INFO
+#logging.level.org.springframework.cloud.gateway=TRACE
