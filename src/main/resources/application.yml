@@ -12,10 +12,10 @@ spring:
             - Path=/msg, /msg2
           filters:
             - TokenRelay=
-        - id: back-resources
-          uri: lb://BACK-RESOURCES
+        - id: account-service
+          uri: lb://ACCOUNT-SERVICE
           predicates:
-            - Path=/res, /res2
+            - Path=/res, /res2, /register
           filters:
             - TokenRelay=
       discovery:
@@ -29,13 +29,14 @@ spring:
           gateway:
             provider: keycloak
             client-id: api-client
-            client-secret: CWpnawIh1TmdiCjJ3UMKp07olyK2LZbv
+            client-secret: kfECkllyhRk4LZpxJYB56ibT54PajiFu
             authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
-            scope: openid, message.read
+            scope: openid, roles, profile
         provider:
           keycloak:
-              issuer-uri: http://localhost:8083/auth/realms/car-repair-realm
+              issuer-uri: http://localhost:8083/realms/car-repair-realm
+
 eureka:
   client:
     service-url:
@@ -44,6 +45,3 @@ eureka:
 logging:
   level:
     root: INFO
-
-#logging.level.org.springframework.cloud.gateway.route.RouteDefinitionLocator=INFO
-#logging.level.org.springframework.cloud.gateway=TRACE
