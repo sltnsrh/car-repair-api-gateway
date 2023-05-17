@@ -3,6 +3,13 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: car-service
+          uri: lb://CAR-SERVICE
+          predicates:
+            - Path=/cars, /cars/**
+          filters:
+            - TokenRelay=
+
         - id: account-service
           uri: lb://ACCOUNT-SERVICE
           predicates:
