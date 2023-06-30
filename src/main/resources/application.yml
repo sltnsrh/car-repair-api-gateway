@@ -8,12 +8,17 @@ spring:
         - id: car-service
           uri: lb://CAR-SERVICE
           predicates:
-            - Path=/cars, /cars/**
+            - Path=/cars/**
 
         - id: account-service
           uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/users/**, /register
+
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
 
       discovery:
         locator:
