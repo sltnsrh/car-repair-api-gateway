@@ -20,6 +20,11 @@ spring:
           predicates:
             - Path=/orders/**
 
+        - id: message-service
+          uri: lb://MESSAGE-SERVICE
+          predicates:
+            - Path=/sender/**
+
       discovery:
         locator:
           enabled: true
